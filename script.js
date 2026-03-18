@@ -3,12 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     dropdownToggles.forEach(toggle => {
         toggle.addEventListener('click', (e) => {
-            // Check if we are in mobile view (screen width <= 768px)
-            if (window.innerWidth <= 768) {
-                e.preventDefault();
-                const parent = toggle.parentElement;
-                parent.classList.toggle('active');
-            }
+            // Mobile toggle logic removed as per revert request
         });
     });
 
