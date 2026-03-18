@@ -179,6 +179,8 @@ a {
     font-size: 0.7rem;
     margin-left: 0.3rem;
     vertical-align: middle;
+    display: inline-block;
+    transition: transform 0.3s ease;
 }
 
 @keyframes fadeUp {
@@ -596,13 +598,22 @@ a {
 
     .dropdown-menu {
         position: static;
-        display: block;
+        display: none; /* Hide by default on mobile */
         box-shadow: none;
         border: none;
         padding: 0;
         margin-top: 0.5rem;
         min-width: 100%;
         background: transparent;
+    }
+
+    .dropdown.active .dropdown-menu {
+        display: block; /* Show when active class is added */
+    }
+
+    .dropdown.active .dropdown-toggle::after {
+        transform: rotate(180deg);
+        display: inline-block;
     }
 
     .dropdown-menu a {
