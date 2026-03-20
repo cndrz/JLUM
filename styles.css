@@ -708,3 +708,34 @@ a {
     font-weight: bold;
 }
 
+/* Events Page Specifics */
+.event-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.75rem;
+}
+
+.event-badge-training {
+    background: #e0f2fe;
+    color: var(--accent-blue);
+}
+
+.event-badge-news {
+    background: #dcfce7;
+    color: var(--accent-green);
+}
+
+.event-date {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-top: auto;
+}
