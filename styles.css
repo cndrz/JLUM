@@ -593,11 +593,19 @@ a {
 }
 
 .course-grid {
+    display: grid;
     grid-template-columns: 1.5fr 1fr;
     gap: 4rem;
     padding: var(--section-padding) 1.5rem;
     max-width: var(--max-width);
     margin: 0 auto;
+}
+
+@media (max-width: 992px) {
+    .course-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
 }
 
 .schedule-box {
@@ -658,6 +666,7 @@ a {
     position: relative;
     overflow: hidden;
     box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.4);
+    margin-top: 3rem;
 }
 
 .benefits-box::after {
