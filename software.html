@@ -49,39 +49,72 @@
         </header>
 
         <main class="page-main">
+            <!-- Featured Projects Section -->
             <section class="section">
                 <div class="container">
-                    <!-- Tech Stack Tags Design -->
-                    <div style="text-align: center; margin-bottom: 4rem;">
-                        <h3 style="margin-bottom: 1rem; color: var(--text-secondary); font-size: 1rem; text-transform: uppercase; letter-spacing: 2px;">Our Tech Stack</h3>
-                        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                            <span style="padding: 0.5rem 1.5rem; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 50px;">React / Next.js</span>
-                            <span style="padding: 0.5rem 1.5rem; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 50px;">Node.js</span>
-                            <span style="padding: 0.5rem 1.5rem; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 50px;">Python / Django</span>
-                            <span style="padding: 0.5rem 1.5rem; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 50px;">AWS / Azure</span>
-                            <span style="padding: 0.5rem 1.5rem; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 50px;">PostgreSQL</span>
-                        </div>
+                    <div class="section-header">
+                        <h2 class="section-title">Featured Projects</h2>
+                        <p class="section-subtitle">A showcase of our custom-built digital solutions tailored to modern business needs.</p>
                     </div>
 
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start;">
-                        <div>
-                            <h2 class="section-title" style="text-align: left;">End-to-End Execution</h2>
-                            <p class="section-subtitle" style="text-align: left; margin-bottom: 1.5rem;">From initial concept to deployment and scaling, our development lifecycle is rigorous, agile, and focused on quality.</p>
-                            <p class="section-subtitle" style="text-align: left;">Whether you need a consumer-facing mobile app with a native feel, or a heavy-duty enterprise web portal managing millions of data points, our engineering team delivers.</p>
-                            
-                            <ul class="form-list">
-                                <li><strong>Frontend:</strong> Lightning-fast, responsive, accessible UIs.</li>
-                                <li><strong>Backend:</strong> Secure, microservices-driven architectures.</li>
-                                <li><strong>Mobile:</strong> iOS, Android, and cross-platform solutions.</li>
-                            </ul>
+                    <div class="cards-grid">
+                        <!-- Project 1 -->
+                        <div class="card">
+                            <div class="card-image" style="background-image: url('safety_dashboard.png'); background-size: cover; background-position: center;"></div>
+                            <div class="card-content">
+                                <h3 class="card-title">Safety Compliance Dashboard</h3>
+                                <p class="card-desc">A comprehensive web-based platform for tracking workplace safety metrics, managing incident reports, and ensuring DOLE regulatory compliance in real-time.</p>
+                                <a href="#" class="btn btn-primary" style="width: 100%;">View Case Study</a>
+                            </div>
                         </div>
 
-                        <div class="contact-form">
-                            <h3 class="card-title">Ready to build?</h3>
-                            <p class="card-desc" style="margin-bottom: 1.5rem;">Let's discuss your project requirements and how our engineering team can bring your vision to life.</p>
-                            <button class="btn btn-primary" style="width: 100%;">Contact Engineering Team</button>
-                            <p style="text-align: center; margin-top: 1rem; font-size: 0.9rem; color: var(--text-secondary);">Typically replies within 24 hours.</p>
+                        <!-- Project 2 -->
+                        <div class="card">
+                            <div class="card-image" style="background-image: url('inventory_system.png'); background-size: cover; background-position: center;"></div>
+                            <div class="card-content">
+                                <h3 class="card-title">Inventory Management System</h3>
+                                <p class="card-desc">A mobile-responsive inventory solution designed for industrial warehouses, featuring barcode scanning, automated restock alerts, and detailed asset tracking.</p>
+                                <a href="#" class="btn btn-primary" style="width: 100%;">View Case Study</a>
+                            </div>
                         </div>
+
+                        <!-- Project 3 -->
+                        <div class="card">
+                            <div class="card-image" style="background-image: url('training_portal.png'); background-size: cover; background-position: center;"></div>
+                            <div class="card-content">
+                                <h3 class="card-title">Employee Training Portal</h3>
+                                <p class="card-desc">An interactive E-learning management system for corporate onboarding, featuring multimedia courses, progress tracking, and automated certification upon completion.</p>
+                                <a href="#" class="btn btn-primary" style="width: 100%;">View Case Study</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tech Stack Section -->
+            <section class="section bg-secondary" style="border-radius: var(--border-radius); padding: 4rem 2rem; margin: 2rem 0;">
+                <div class="container">
+                    <div style="text-align: center;">
+                        <h3 style="margin-bottom: 2rem; color: var(--text-secondary); font-size: 1rem; text-transform: uppercase; letter-spacing: 2px;">Our Tech Stack</h3>
+                        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                            <span style="padding: 0.5rem 1.5rem; background: #ffffff; border: 1px solid var(--border-color); border-radius: 50px; font-weight: 500;">React / Next.js</span>
+                            <span style="padding: 0.5rem 1.5rem; background: #ffffff; border: 1px solid var(--border-color); border-radius: 50px; font-weight: 500;">Node.js</span>
+                            <span style="padding: 0.5rem 1.5rem; background: #ffffff; border: 1px solid var(--border-color); border-radius: 50px; font-weight: 500;">Python / Django</span>
+                            <span style="padding: 0.5rem 1.5rem; background: #ffffff; border: 1px solid var(--border-color); border-radius: 50px; font-weight: 500;">AWS / Azure</span>
+                            <span style="padding: 0.5rem 1.5rem; background: #ffffff; border: 1px solid var(--border-color); border-radius: 50px; font-weight: 500;">PostgreSQL</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Final CTA Section -->
+            <section class="section">
+                <div class="container">
+                    <div class="contact-form" style="max-width: 800px; margin: 0 auto; text-align: center;">
+                        <h2 class="section-title">Ready to Start Your Project?</h2>
+                        <p class="section-subtitle" style="margin-bottom: 2rem;">Let's discuss how our engineering team can build your next digital solution. We turn complex requirements into elegant reality.</p>
+                        <a href="contact.html" class="btn btn-primary" style="padding: 1rem 3rem;">Contact Engineering Team</a>
+                        <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-secondary);">Response time typically under 24 hours.</p>
                     </div>
                 </div>
             </section>
