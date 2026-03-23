@@ -651,6 +651,7 @@ a {
 }
 
 .benefits-box {
+    margin-top: 2rem;
     background: linear-gradient(135deg, #3b82f6, #60a5fa);
     border-radius: var(--border-radius);
     padding: 2.5rem;
