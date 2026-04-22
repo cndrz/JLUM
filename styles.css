@@ -103,7 +103,7 @@ a {
 
 .nav-links {
     display: flex;
-    gap: 2.5rem;
+    gap: 1.25rem;
     align-items: center;
 }
 
@@ -135,6 +135,7 @@ a {
     color: var(--text-secondary);
     position: relative;
     text-decoration: none;
+    white-space: nowrap;
 }
 
 .nav-links a:hover,
