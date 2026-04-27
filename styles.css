@@ -236,7 +236,12 @@ a {
     width: 100%;
     max-width: var(--max-width);
     margin: 0 auto;
-    padding: 4rem 2rem;
+    padding: 2rem; /* Reduced from 4rem 2rem */
+}
+
+/* Reduce spacing when a section is used inside page-main */
+.page-main .section {
+    padding-top: 0;
 }
 
 .section {
@@ -597,7 +602,7 @@ a {
     display: grid;
     grid-template-columns: 1.5fr 1fr;
     gap: 4rem;
-    padding: var(--section-padding) 1.5rem;
+    padding: 2rem 1.5rem 6rem; /* Reduced top padding to match page-main */
     max-width: var(--max-width);
     margin: 0 auto;
 }
