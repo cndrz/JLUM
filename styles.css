@@ -78,11 +78,11 @@ a {
 
 .nav-container {
     width: 100%;
-    max-width: var(--max-width);
+    max-width: 1400px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 2rem;
+    padding: 0 3rem;
 }
 
 .nav-logo {
@@ -103,7 +103,7 @@ a {
 
 .nav-links {
     display: flex;
-    gap: 1.25rem;
+    gap: 2rem;
     align-items: center;
 }
 
