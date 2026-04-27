@@ -31,8 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            // Fetch fragments from the /pages/ directory
-            const response = await fetch(`/pages/${filename}`);
+            // Fetch fragments from the pages/ directory (relative)
+            const response = await fetch(`pages/${filename}`);
             if (!response.ok) throw new Error('Page not found');
             const html = await response.text();
 
