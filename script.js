@@ -48,9 +48,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            // Fetch fragments from the pages/ directory (relative)
-            const response = await fetch(`pages/${filename}`);
-            if (!response.ok) throw new Error('Page not found');
+            console.log('Loading content for:', filename);
+            // Fetch fragments from the pages/ directory (absolute)
+            const response = await fetch(`/pages/${filename}`);
+            if (!response.ok) {
+                console.error('Fetch failed for:', filename, response.status);
+                throw new Error('Page not found');
+            }
             const html = await response.text();
 
             // Inject and scroll to top
