@@ -16,7 +16,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 d.classList.remove('show');
             });
         }
+        
+        // Close hamburger menu when clicking outside
+        if (!e.target.closest('.nav-links') && !e.target.closest('.hamburger')) {
+            document.getElementById('nav-links').classList.remove('active');
+            document.getElementById('hamburger').classList.remove('active');
+        }
     });
+
+    // Hamburger Menu Logic
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('nav-links');
+
+    if (hamburger && navLinks) {
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+    }
 
     // SPA Router Logic
     const app = document.getElementById('app');
@@ -76,6 +93,11 @@ document.addEventListener('DOMContentLoaded', () => {
             // If it's a valid internal link and we aren't opening a new tab
             if (href && !href.startsWith('http') && !href.startsWith('#') && link.target !== '_blank') {
                 e.preventDefault(); // Stop full reload
+                
+                // Close mobile menu
+                document.getElementById('nav-links').classList.remove('active');
+                document.getElementById('hamburger').classList.remove('active');
+                
                 history.pushState(null, '', href); // Update URL bar
                 loadContent(href); // Load the fragment
             }
