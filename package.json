@@ -20,7 +20,7 @@
     "url": "https://github.com/cndrz/JLUM/issues"
   },
   "homepage": "https://github.com/cndrz/JLUM#readme",
-  "devDependencies": {
+  "dependencies": {
     "vite": "^8.0.9"
   }
 }
