@@ -1,0 +1,265 @@
+<header class="page-header" style="padding: 3rem 2rem;">
+    <div class="container">
+        <h1>Admin Control Panel</h1>
+        <p>Manage News, Events, and Course Training Schedules across the JLUM platform.</p>
+    </div>
+</header>
+
+<main class="page-main" style="max-width: 1400px; padding: 0;">
+    <!-- Login Overlay Gate -->
+    <div id="admin-login-gate" class="admin-login-overlay">
+        <div class="admin-login-card">
+            <div class="nav-logo-icon" style="margin: 0 auto 1.5rem; width: 48px; height: 48px;"></div>
+            <h2 style="margin-bottom: 0.5rem; font-size: 1.75rem;">Security Verification</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem; font-size: 0.95rem;">Please enter the administrator password to access the CMS.</p>
+            
+            <form id="admin-login-form" style="display: flex; flex-direction: column; gap: 1rem;">
+                <div class="admin-form-group" style="text-align: left;">
+                    <label class="admin-form-label" for="login-password">Admin Password</label>
+                    <input class="admin-form-input" type="password" id="login-password" required placeholder="Enter password...">
+                </div>
+                <div id="login-error-msg" style="color: #ef4444; font-size: 0.85rem; display: none; font-weight: 600;">Incorrect password. Please try again.</div>
+                <button class="btn btn-primary" type="submit" style="margin-top: 1rem; width: 100%;">Authenticate</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- GitHub PAT Prompt Modal (Shown after successful login if PAT is missing) -->
+    <div id="github-pat-modal" class="admin-modal">
+        <div class="admin-modal-content" style="max-width: 500px;">
+            <div class="admin-modal-header">
+                <h3 class="admin-modal-title">GitHub API Setup</h3>
+            </div>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.95rem; line-height: 1.5;">
+                To publish updates directly to Vercel, this system uses the GitHub API. Please enter a <strong>GitHub Personal Access Token (PAT)</strong> with `repo` write permissions.
+            </p>
+            <div style="background: #f8fafc; border: 1px solid var(--border-color); padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; font-size: 0.85rem;">
+                <ol style="margin-left: 1.25rem; display: flex; flex-direction: column; gap: 0.5rem; color: var(--text-secondary);">
+                    <li>Go to <a href="https://github.com/settings/tokens" target="_blank" style="color: var(--accent-blue); text-decoration: underline;">GitHub Developer Settings</a></li>
+                    <li>Generate a new token (Classic) with the <strong>repo</strong> checkbox enabled.</li>
+                    <li>Paste your token below. It is stored securely in your local browser only.</li>
+                </ol>
+            </div>
+            <form id="github-pat-form">
+                <div class="admin-form-group">
+                    <label class="admin-form-label" for="pat-input">Personal Access Token</label>
+                    <input class="admin-form-input" type="password" id="pat-input" required placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxx">
+                </div>
+                <div style="display: flex; gap: 1rem; margin-top: 1.5rem; justify-content: flex-end;">
+                    <button class="btn btn-primary" type="submit">Save and Continue</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard Main Interface -->
+    <div id="admin-dashboard" class="admin-dashboard-container" style="display: none;">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="admin-sidebar">
+            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <div class="admin-nav-item active" data-tab="news">
+                    <span>📰</span> News & Events
+                </div>
+                <div class="admin-nav-item" data-tab="schedules">
+                    <span>📅</span> Training Schedules
+                </div>
+            </div>
+
+            <!-- Publish Changes Bar -->
+            <div class="admin-publish-bar">
+                <div id="publish-status" class="publish-status-indicator">
+                    All changes saved locally.
+                </div>
+                <button id="btn-publish-all" class="btn btn-primary" style="background: var(--accent-green); display: flex; gap: 0.5rem; justify-content: center; align-items: center;">
+                    <span>💾</span> Publish Changes Live
+                </button>
+                
+                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color); font-size: 0.8rem; text-align: center;">
+                    <a href="#" id="btn-reset-pat" style="color: var(--text-secondary); text-decoration: underline;">Update GitHub Token</a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Workspace Area -->
+        <section class="admin-main-view">
+            
+            <!-- --- NEWS & EVENTS TAB --- -->
+            <div id="tab-content-news" class="tab-content">
+                <div class="admin-section-header">
+                    <div>
+                        <h2 style="font-size: 1.5rem; margin-bottom: 0.25rem;">News & Events Manager</h2>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Create, edit, and delete dynamic events on the website.</p>
+                    </div>
+                    <button id="btn-add-event" class="btn btn-secondary" style="font-size: 0.9rem; padding: 0.6rem 1.2rem;">
+                        ➕ New Event
+                    </button>
+                </div>
+
+                <div class="admin-stats-bar">
+                    <div class="admin-stat-card">
+                        <span class="stat-label">Published Articles</span>
+                        <span id="stat-total-events" class="stat-number" style="font-size: 2rem;">0</span>
+                    </div>
+                    <div class="admin-stat-card">
+                        <span class="stat-label">Last Saved</span>
+                        <span id="stat-last-saved" class="stat-number" style="font-size: 1.1rem; color: var(--text-secondary); font-weight: 500; height: 2.4rem; display: flex; align-items: center;">Never</span>
+                    </div>
+                </div>
+
+                <div class="admin-table-wrapper">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 80px;">Image</th>
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>Date</th>
+                                <th style="width: 120px; text-align: center;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-events-list">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- --- TRAINING SCHEDULES TAB --- -->
+            <div id="tab-content-schedules" class="tab-content" style="display: none;">
+                <div class="admin-section-header">
+                    <div>
+                        <h2 style="font-size: 1.5rem; margin-bottom: 0.25rem;">Training Schedules Manager</h2>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Manage schedule batches for all certified courses.</p>
+                    </div>
+                    <button id="btn-add-schedule" class="btn btn-secondary" style="font-size: 0.9rem; padding: 0.6rem 1.2rem;">
+                        ➕ Add Batch
+                    </button>
+                </div>
+
+                <div class="admin-form-group" style="max-width: 400px; margin-bottom: 2rem;">
+                    <label class="admin-form-label" for="admin-course-selector">Select Course Page</label>
+                    <select class="admin-form-select" id="admin-course-selector">
+                        <option value="bosh-so1">BOSH SO1 (Basic Safety Officer 1)</option>
+                        <option value="bosh-so2">BOSH SO2 (Basic Safety Officer 2)</option>
+                        <option value="cosh-so2">COSH SO2 (Construction Safety Officer 2)</option>
+                        <option value="standard-first-aid">Standard First Aid and BLS</option>
+                        <option value="emergency-first-aid">Emergency First Aid</option>
+                        <option value="occupational-first-aid">Occupational First Aid and BLS</option>
+                        <option value="lcm-hirac">LCM + HIRAC Training</option>
+                        <option value="tot">Training of Trainers (TOT)</option>
+                        <option value="audit">Safety Program Audit</option>
+                    </select>
+                </div>
+
+                <div class="admin-table-wrapper">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Batch Name</th>
+                                <th>Scheduled Dates</th>
+                                <th style="width: 120px; text-align: center;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-schedules-list">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+    </div>
+
+    <!-- Modal Form: Add / Edit Event -->
+    <div id="event-form-modal" class="admin-modal">
+        <div class="admin-modal-content">
+            <div class="admin-modal-header">
+                <h3 id="event-modal-title" class="admin-modal-title">New Event</h3>
+                <button class="admin-modal-close" id="btn-close-event-modal">&times;</button>
+            </div>
+            <form id="event-editor-form">
+                <input type="hidden" id="event-form-id">
+                
+                <div class="admin-form-grid">
+                    <div class="admin-form-group admin-form-group-full">
+                        <label class="admin-form-label" for="event-form-title">Event Title</label>
+                        <input class="admin-form-input" type="text" id="event-form-title" required placeholder="e.g. BOSH SO2 Training - Batch 15">
+                    </div>
+                    
+                    <div class="admin-form-group">
+                        <label class="admin-form-label" for="event-form-badge">Badge Label</label>
+                        <input class="admin-form-input" type="text" id="event-form-badge" required placeholder="e.g. Upcoming Training">
+                    </div>
+                    
+                    <div class="admin-form-group">
+                        <label class="admin-form-label" for="event-form-badge-type">Category Tag Type</label>
+                        <select class="admin-form-select" id="event-form-badge-type">
+                            <option value="training">Training (Blue Tag)</option>
+                            <option value="news">News / Achievement (Green Tag)</option>
+                        </select>
+                    </div>
+
+                    <div class="admin-form-group">
+                        <label class="admin-form-label" for="event-form-date">Date String</label>
+                        <input class="admin-form-input" type="text" id="event-form-date" required placeholder="e.g. April 12-16, 2026">
+                    </div>
+
+                    <div class="admin-form-group">
+                        <label class="admin-form-label" for="event-form-slug">URL Slug</label>
+                        <input class="admin-form-input" type="text" id="event-form-slug" required placeholder="e.g. bosh-so2-april-2026" pattern="^[a-z0-9]+(?:-[a-z0-9]+)*$">
+                    </div>
+
+                    <div class="admin-form-group admin-form-group-full">
+                        <label class="admin-form-label" for="event-form-image">Image URL</label>
+                        <input class="admin-form-input" type="url" id="event-form-image" required placeholder="e.g. https://images.unsplash.com/photo-...">
+                    </div>
+
+                    <div class="admin-form-group admin-form-group-full">
+                        <label class="admin-form-label" for="event-form-summary">Short Card Summary</label>
+                        <input class="admin-form-input" type="text" id="event-form-summary" required placeholder="A short preview shown on the events card feed page.">
+                    </div>
+
+                    <div class="admin-form-group admin-form-group-full">
+                        <label class="admin-form-label" for="event-form-body">Full Article Content (Body)</label>
+                        <textarea class="admin-form-textarea" id="event-form-body" required placeholder="Full description for the detail page. Supports multiple paragraphs."></textarea>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 1rem; justify-content: flex-end; border-top: 1px solid var(--border-color); padding-top: 1.5rem;">
+                    <button class="btn btn-secondary" type="button" id="btn-cancel-event">Cancel</button>
+                    <button class="btn btn-primary" type="submit" id="btn-save-event">Save Event</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Form: Add / Edit Schedule Batch -->
+    <div id="schedule-form-modal" class="admin-modal">
+        <div class="admin-modal-content" style="max-width: 500px;">
+            <div class="admin-modal-header">
+                <h3 id="schedule-modal-title" class="admin-modal-title">New Schedule Batch</h3>
+                <button class="admin-modal-close" id="btn-close-schedule-modal">&times;</button>
+            </div>
+            <form id="schedule-editor-form">
+                <input type="hidden" id="schedule-form-index">
+                
+                <div class="admin-form-group">
+                    <label class="admin-form-label" for="schedule-form-batch">Batch Name</label>
+                    <input class="admin-form-input" type="text" id="schedule-form-batch" required placeholder="e.g. BOSH SO1 Batch 1">
+                </div>
+                
+                <div class="admin-form-group">
+                    <label class="admin-form-label" for="schedule-form-dates">Scheduled Dates / Text</label>
+                    <input class="admin-form-input" type="text" id="schedule-form-dates" required placeholder="e.g. May 15-19, 2026 or Dates TBD">
+                </div>
+
+                <div style="display: flex; gap: 1rem; justify-content: flex-end; border-top: 1px solid var(--border-color); padding-top: 1.5rem; margin-top: 1.5rem;">
+                    <button class="btn btn-secondary" type="button" id="btn-cancel-schedule">Cancel</button>
+                    <button class="btn btn-primary" type="submit" id="btn-save-schedule">Save Schedule</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</main>

@@ -1,0 +1,104 @@
+{
+  "events": [
+    {
+      "id": "evt-001",
+      "slug": "bosh-so2-april-2026",
+      "title": "BOSH SO2 Certification - April 2026 Batch",
+      "badge": "Upcoming Training",
+      "badgeType": "training",
+      "date": "April 12-16, 2026",
+      "image": "https://images.unsplash.com/photo-1540575861501-7ad05823c23d?auto=format&fit=crop&q=80&w=800",
+      "summary": "Registration is now open for our upcoming Basic Occupational Safety and Health (BOSH) Training for Safety Officer 2. Secure your slot today!",
+      "body": "Registration is now open for our upcoming Basic Occupational Safety and Health (BOSH) Training for Safety Officer 2. Secure your slot today!\n\nThis training program is fully compliant with the Department of Labor and Employment (DOLE) standards. It covers essential safety concepts, occupational health hazards, hazard identification, risk assessment and control (HIRAC), and administrative OSH requirements. Safety Officer 2 (SO2) certification is a legal requirement for safety officers operating in the Philippines.\n\n### Who Should Attend?\n- Designated Safety Officers\n- HR Managers and Personnel\n- Engineers and Supervisors\n- Members of the OSH Committee\n\n### What is Covered?\n- Introduction to OSH legislation and DOLE guidelines\n- Industrial hygiene and physical hazards control\n- Fire safety, electrical safety, and machine guarding\n- Implementing a successful health program in the workplace\n\nEnsure your workplace is compliant and safe. Register today to reserve your slot!"
+    },
+    {
+      "id": "evt-002",
+      "slug": "jlum-expands-consultation-services-2026",
+      "title": "JLUM Expands Safety Consultation Services",
+      "badge": "Company News",
+      "badgeType": "news",
+      "date": "March 15, 2026",
+      "image": "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=800",
+      "summary": "We are excited to announce the expansion of our consultancy wing, now offering comprehensive safety audits for the manufacturing sector.",
+      "body": "We are excited to announce the expansion of our consultancy wing, now offering comprehensive safety audits for the manufacturing sector.\n\nWith the rapid growth of industrial operations, compliance with national safety regulations has become more critical than ever. Our expanded team of experienced safety consultants is now ready to assist your organization with professional, field-tested guidance.\n\n### New Service Offerings:\n- **Comprehensive Facility Safety Audits**: In-depth reviews of your physical plant and operating procedures.\n- **Custom OSH Program Development**: Designing custom safety manuals tailored specifically to your company workflow.\n- **Hazard Identification and Risk Assessments (HIRAC)**: Detailed threat modeling and risk management planning.\n- **Emergency Preparedness Plan Reviews**: Validating your evacuation, fire, and medical response readiness.\n\nPartner with JL UNI MULTISERV INC. to build a culture of safety and operational excellence."
+    },
+    {
+      "id": "evt-003",
+      "slug": "first-aid-cpr-workshop-may-2026",
+      "title": "First Aid & CPR Basics for Industrial Workers",
+      "badge": "Workshop",
+      "badgeType": "training",
+      "date": "May 05, 2026",
+      "image": "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80&w=800",
+      "summary": "A hands-on workshop designed to equip workers with essential life-saving skills in high-risk environments.",
+      "body": "A hands-on workshop designed to equip workers with essential life-saving skills in high-risk environments.\n\nThis intensive training program offers practical experience in basic life support, cardiopulmonary resuscitation (CPR), first aid administration, and responding to common workplace emergencies such as burns, fractures, and choking.\n\n### Key Highlights:\n- Hands-on CPR practice with adult and infant manikins\n- First aid drills and simulated emergency scenarios\n- Certificate of completion valid for regulatory compliance\n- Experienced emergency response instructors\n\nEquip your team with the skills to save lives. Register now!"
+    },
+    {
+      "id": "evt-004",
+      "slug": "excellence-osh-training-q1-2026",
+      "title": "Recognized for Excellence in OSH Training",
+      "badge": "Achievement",
+      "badgeType": "news",
+      "date": "March 01, 2026",
+      "image": "https://images.unsplash.com/photo-1454165833742-2721bf955030?auto=format&fit=crop&q=80&w=800",
+      "summary": "JL UNI MULTISERV INC. has been recognized as a top provider of Occupational Safety and Health training for the first quarter of 2026.",
+      "body": "JL UNI MULTISERV INC. has been recognized as a top provider of Occupational Safety and Health training for the first quarter of 2026.\n\nThis recognition highlights our commitment to delivering top-quality safety education and helping businesses achieve full compliance. We thank our dedicated training team and our valued corporate partners for making this milestone possible.\n\nWe remain dedicated to advancing workplace safety standards across the region and look forward to introducing new, highly interactive training modalities in the coming quarters."
+    }
+  ],
+  "schedules": {
+    "bosh-so1": [
+      {
+        "batch": "BOSH SO1 Batch 1",
+        "dates": "Dates TBD"
+      }
+    ],
+    "bosh-so2": [
+      {
+        "batch": "BOSH SO2 Batch 1",
+        "dates": "Dates TBD"
+      }
+    ],
+    "cosh-so2": [
+      {
+        "batch": "COSH SO2 Batch 1",
+        "dates": "Dates TBD"
+      }
+    ],
+    "standard-first-aid": [
+      {
+        "batch": "SFA-BLS Batch 1",
+        "dates": "Dates TBD"
+      }
+    ],
+    "emergency-first-aid": [
+      {
+        "batch": "EFA Batch 1",
+        "dates": "Dates TBD"
+      }
+    ],
+    "occupational-first-aid": [
+      {
+        "batch": "OFA-BLS Batch 1",
+        "dates": "Dates TBD"
+      }
+    ],
+    "lcm-hirac": [
+      {
+        "batch": "LCM+HIRAC Batch 1",
+        "dates": "Dates TBD"
+      }
+    ],
+    "tot": [
+      {
+        "batch": "TOT Batch 1",
+        "dates": "Dates TBD"
+      }
+    ],
+    "audit": [
+      {
+        "batch": "Audit Batch 1",
+        "dates": "Dates TBD"
+      }
+    ]
+  }
+}
