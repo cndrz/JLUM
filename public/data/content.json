@@ -1,5 +1,16 @@
 {
-  "events": [],
+  "events": [
+    {
+      "id": "evt-mpdo8l4i",
+      "title": "DFGDFSGSDFG",
+      "badge": "FGDFGDFG",
+      "badgeType": "training",
+      "date": "APRIL 12-16, 3036",
+      "slug": "bosh-111-april-2027",
+      "summary": "DFGDFG",
+      "body": "FDGFDGDFG"
+    }
+  ],
   "schedules": {
     "bosh-so1": [
       {
