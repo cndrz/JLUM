@@ -179,10 +179,20 @@ const ADMIN_PASSWORD = (typeof import.meta !== 'undefined' && import.meta.env)
     ? import.meta.env.VITE_ADMIN_PASSWORD
     : 'JLUMADMIN12345';
 
+// Build-time Environment Variable GitHub Token configuration (optional fallback)
+const ENV_GITHUB_PAT = (typeof import.meta !== 'undefined' && import.meta.env)
+    ? import.meta.env.VITE_GITHUB_PAT
+    : '';
+
 // GitHub Repository Configuration
 const GITHUB_OWNER = 'cndrz';
 const GITHUB_REPO = 'JLUM';
 const CONTENT_FILE_PATH = 'public/data/content.json';
+
+// Retrieve token, prioritizing localStorage over the environment variable (allowing local overrides)
+function getGithubPAT() {
+    return localStorage.getItem('github_pat') || ENV_GITHUB_PAT || '';
+}
 
 // Shared local content memory model
 let localContentData = null;
@@ -381,9 +391,9 @@ async function initAdminCMS() {
         }
     });
 
-    // Check PAT setup in localStorage
+    // Check PAT setup in localStorage or Environment Variables
     function checkGithubPATSetup() {
-        const pat = localStorage.getItem('github_pat');
+        const pat = getGithubPAT();
         if (!pat) {
             githubPatModal.classList.add('show');
         } else {
@@ -667,7 +677,7 @@ function markUnsavedChanges() {
 
 // GitHub REST API Commit Pipeline
 async function publishChangesToGitHub() {
-    const pat = localStorage.getItem('github_pat');
+    const pat = getGithubPAT();
     const indicator = document.getElementById('publish-status');
     const btn = document.getElementById('btn-publish-all');
 
