@@ -1,5 +1,16 @@
 {
-  "events": [],
+  "events": [
+    {
+      "id": "evt-mpdq2sbo",
+      "title": "Free training for BOSH SO1",
+      "badge": "Upcoming Tite",
+      "badgeType": "training",
+      "date": "May 20, 2026",
+      "slug": "bosh-so1-may-2-2026",
+      "summary": "Free po",
+      "body": "TITE MALAKI"
+    }
+  ],
   "schedules": {
     "bosh-so1": [
       {
