@@ -5,7 +5,9 @@ document.addEventListener('DOMContentLoaded', () => {
     dropdownToggles.forEach(toggle => {
         toggle.addEventListener('click', (e) => {
             e.preventDefault();
-            toggle.nextElementSibling.classList.toggle('show');
+            const menu = toggle.nextElementSibling;
+            menu.classList.toggle('show');
+            toggle.classList.toggle('active');
         });
     });
 
@@ -14,6 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!e.target.closest('.dropdown')) {
             document.querySelectorAll('.dropdown-menu').forEach(d => {
                 d.classList.remove('show');
+            });
+            document.querySelectorAll('.dropdown-toggle').forEach(t => {
+                t.classList.remove('active');
             });
         }
         

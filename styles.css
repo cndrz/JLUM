@@ -23,11 +23,14 @@
     --nav-height: 80px;
     --border-radius: 12px;
  
-    /* Fixed Typography Tokens for Desktop */
-    --font-size-h1: 3.5rem;
-    --font-size-h2: 2.5rem;
-    --font-size-h3: 1.75rem;
-    --section-padding: 6rem;
+    /* Fluid Typography - Scales between mobile and desktop */
+    --font-size-h1: clamp(2rem, 8vw, 3.5rem);
+    --font-size-h2: clamp(1.75rem, 6vw, 2.5rem);
+    --font-size-h3: clamp(1.5rem, 4vw, 1.75rem);
+    --font-size-body: clamp(1rem, 2vw, 1.1rem);
+    
+    --section-padding: clamp(3rem, 10vh, 6rem);
+    --container-padding: clamp(1rem, 5vw, 2rem);
 }
  
 * {
@@ -198,6 +201,11 @@ a {
     display: inline-block;
     transition: transform 0.3s ease;
 }
+
+.dropdown-toggle.active::after,
+.dropdown:hover .dropdown-toggle::after {
+    transform: rotate(180deg);
+}
  
 @keyframes fadeUp {
     from {
@@ -254,7 +262,7 @@ a {
 }
  
 .section {
-    padding: var(--section-padding) 1.5rem;
+    padding: var(--section-padding) var(--container-padding);
     width: 100%;
 }
  
@@ -267,16 +275,28 @@ a {
 .hero {
     background: var(--bg-hero);
     position: relative;
-    padding: 6rem 2rem;
+    padding: var(--section-padding) var(--container-padding);
     display: flex;
     align-items: center;
 }
  
 .hero .container {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: clamp(2rem, 5vw, 4rem);
     align-items: center;
+}
+
+@media (max-width: 992px) {
+    .hero .container {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    
+    .hero-content {
+        max-width: 100%;
+        margin: 0 auto;
+    }
 }
  
 .hero-content {
@@ -287,13 +307,21 @@ a {
     font-size: var(--font-size-h1);
     margin-bottom: 1.5rem;
     color: var(--text-primary);
-    line-height: 1.1;
+    line-height: 1.2;
 }
  
 .hero-subtitle {
-    font-size: 1.1rem;
+    font-size: var(--font-size-body);
     color: var(--text-secondary);
     margin-bottom: 2.5rem;
+    max-width: 600px;
+}
+
+@media (max-width: 992px) {
+    .hero-subtitle {
+        margin-left: auto;
+        margin-right: auto;
+    }
 }
  
 .hero-image {
@@ -343,6 +371,20 @@ a {
     gap: 1rem;
     flex-wrap: wrap;
 }
+
+@media (max-width: 600px) {
+    .btn-group {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+    
+    .btn {
+        width: 100%;
+    }
+}
  
 /* Section Headers */
 .section-header {
@@ -364,7 +406,7 @@ a {
 /* Cards Grid */
 .cards-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(350px, 100%), 1fr));
     gap: 2rem;
 }
  
@@ -410,7 +452,7 @@ a {
 /* Features Grid */
 .features-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(350px, 100%), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
     gap: 1.5rem;
 }
  
@@ -447,6 +489,16 @@ a {
 }
  
 /* Stats Section */
+.stats-content {
+    text-align: left;
+}
+
+@media (max-width: 992px) {
+    .stats-content {
+        text-align: center;
+    }
+}
+
 .stats-container {
     display: flex;
     gap: 3rem;
@@ -457,6 +509,13 @@ a {
 .stat-item {
     display: flex;
     flex-direction: column;
+    align-items: center; /* Center for mobile/wrapped view */
+}
+
+@media (min-width: 993px) {
+    .stat-item {
+        align-items: flex-start; /* Left align for desktop */
+    }
 }
  
 .stat-number {
@@ -869,19 +928,7 @@ a {
 
 /* Responsive Media Queries */
 @media (max-width: 1024px) {
-    :root {
-        --font-size-h1: 2.75rem;
-        --font-size-h2: 2rem;
-        --section-padding: 4rem;
-    }
-
-    .nav-container {
-        padding: 0 1.5rem;
-    }
-
-    .hero .container {
-        gap: 2rem;
-    }
+    /* No longer need fixed overrides as we use clamp() */
 }
 
 @media (max-width: 768px) {
@@ -897,16 +944,20 @@ a {
         height: calc(100vh - var(--nav-height));
         background: white;
         flex-direction: column;
-        padding: 2rem;
+        padding: 2.5rem;
         gap: 1.5rem;
-        transition: 0.4s ease;
+        transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         align-items: flex-start;
         overflow-y: auto;
+        opacity: 0;
+        visibility: hidden;
     }
 
     .nav-links.active {
         right: 0;
+        opacity: 1;
+        visibility: visible;
     }
 
     .dropdown-menu {
@@ -917,6 +968,9 @@ a {
         border: none;
         padding-left: 1rem;
         animation: none;
+        background: var(--bg-secondary);
+        border-radius: 8px;
+        margin-top: 0.5rem;
     }
 
     .dropdown-menu.show {
@@ -927,23 +981,10 @@ a {
         font-size: 1.1rem;
     }
 
-    .hero .container {
-        grid-template-columns: 1fr;
-        text-align: center;
-    }
-
-    .hero-content {
-        margin: 0 auto;
-    }
-
-    .btn-group {
-        justify-content: center;
-    }
-
     .stats-container {
         justify-content: center;
         flex-wrap: wrap;
-        gap: 1.5rem;
+        gap: 2.5rem;
     }
 
     .form-section {
@@ -952,7 +993,7 @@ a {
     }
 
     .course-hero h1 {
-        font-size: 2.5rem;
+        font-size: clamp(2rem, 10vw, 3.5rem);
     }
 
     .course-grid {
@@ -961,29 +1002,44 @@ a {
     }
 
     .page-header {
-        padding: 3rem 1rem;
+        padding: 4rem 1rem;
     }
 
     .page-main {
-        padding: 1rem;
+        padding: 1.5rem;
     }
 }
 
 @media (max-width: 480px) {
     :root {
-        --font-size-h1: 2.25rem;
-        --nav-height: 70px;
-    }
-
-    .hero-title {
-        font-size: 2rem;
-    }
-
-    .stat-number {
-        font-size: 2rem;
+        --nav-height: 60px;
     }
 
     .footer-grid {
+        gap: 2.5rem;
+        text-align: center;
+    }
+
+    .footer-logo {
+        justify-content: center;
+    }
+
+    .nav-logo-icon {
+        width: 28px;
+        height: 28px;
+    }
+}
+
+/* Responsive Grid Helpers */
+.responsive-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+}
+
+@media (max-width: 768px) {
+    .responsive-grid-2 {
+        grid-template-columns: 1fr;
         gap: 2rem;
     }
 }
