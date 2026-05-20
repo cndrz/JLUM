@@ -985,8 +985,7 @@ async function publishChangesToGitHub() {
         const getResponse = await fetch(apiUrl, {
             headers: {
                 'Authorization': `token ${pat}`,
-                'Accept': 'application/vnd.github.v3+json',
-                'Cache-Control': 'no-cache'
+                'Accept': 'application/vnd.github.v3+json'
             }
         });
 
