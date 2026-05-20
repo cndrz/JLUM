@@ -1,23 +1,7 @@
 {
-  "events": [
-    {
-      "id": "evt-mpdpdzgn",
-      "title": "Free training for BOSH SO1",
-      "badge": "Upcoming Tite",
-      "badgeType": "news",
-      "date": "May 20, 2026",
-      "slug": "bosh-so1-may-2-2026",
-      "summary": "Free po",
-      "body": "TITE KO MALAKI"
-    }
-  ],
+  "events": [],
   "schedules": {
-    "bosh-so1": [
-      {
-        "batch": "BATCH 1",
-        "dates": "May 23-27 & June 23-27, 2026"
-      }
-    ],
+    "bosh-so1": [],
     "bosh-so2": [
       {
         "batch": "BOSH SO2 Batch 1",
