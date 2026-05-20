@@ -1,7 +1,12 @@
 {
   "events": [],
   "schedules": {
-    "bosh-so1": [],
+    "bosh-so1": [
+      {
+        "batch": "BATCH 1",
+        "dates": "May 23-27 & June 23-27, 2026"
+      }
+    ],
     "bosh-so2": [
       {
         "batch": "BOSH SO2 Batch 1",
