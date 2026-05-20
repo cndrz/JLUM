@@ -59,10 +59,10 @@
         <aside class="admin-sidebar">
             <div style="display: flex; flex-direction: column; gap: 0.5rem;">
                 <div class="admin-nav-item active" data-tab="news">
-                    <span>📰</span> News & Events
+                    News & Events
                 </div>
                 <div class="admin-nav-item" data-tab="schedules">
-                    <span>📅</span> Training Schedules
+                    Training Schedules
                 </div>
             </div>
 
@@ -72,7 +72,7 @@
                     All changes saved locally.
                 </div>
                 <button id="btn-publish-all" class="btn btn-primary" style="background: var(--accent-green); display: flex; gap: 0.5rem; justify-content: center; align-items: center;">
-                    <span>💾</span> Publish Changes Live
+                    Publish Changes Live
                 </button>
                 
                 <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color); font-size: 0.8rem; text-align: center;">
@@ -92,7 +92,7 @@
                         <p style="color: var(--text-secondary); font-size: 0.9rem;">Create, edit, and delete dynamic events on the website.</p>
                     </div>
                     <button id="btn-add-event" class="btn btn-secondary" style="font-size: 0.9rem; padding: 0.6rem 1.2rem;">
-                        ➕ New Event
+                        + New Event
                     </button>
                 </div>
 
@@ -111,7 +111,6 @@
                     <table class="admin-table">
                         <thead>
                             <tr>
-                                <th style="width: 80px;">Image</th>
                                 <th>Title</th>
                                 <th>Category</th>
                                 <th>Date</th>
@@ -133,7 +132,7 @@
                         <p style="color: var(--text-secondary); font-size: 0.9rem;">Manage schedule batches for all certified courses.</p>
                     </div>
                     <button id="btn-add-schedule" class="btn btn-secondary" style="font-size: 0.9rem; padding: 0.6rem 1.2rem;">
-                        ➕ Add Batch
+                        + Add Batch
                     </button>
                 </div>
 
@@ -211,11 +210,6 @@
                     </div>
 
                     <div class="admin-form-group admin-form-group-full">
-                        <label class="admin-form-label" for="event-form-image">Image URL</label>
-                        <input class="admin-form-input" type="url" id="event-form-image" required placeholder="e.g. https://images.unsplash.com/photo-...">
-                    </div>
-
-                    <div class="admin-form-group admin-form-group-full">
                         <label class="admin-form-label" for="event-form-summary">Short Card Summary</label>
                         <input class="admin-form-input" type="text" id="event-form-summary" required placeholder="A short preview shown on the events card feed page.">
                     </div>
@@ -236,7 +230,7 @@
 
     <!-- Modal Form: Add / Edit Schedule Batch -->
     <div id="schedule-form-modal" class="admin-modal">
-        <div class="admin-modal-content" style="max-width: 500px;">
+        <div class="admin-modal-content" style="max-width: 550px;">
             <div class="admin-modal-header">
                 <h3 id="schedule-modal-title" class="admin-modal-title">New Schedule Batch</h3>
                 <button class="admin-modal-close" id="btn-close-schedule-modal">&times;</button>
@@ -249,9 +243,48 @@
                     <input class="admin-form-input" type="text" id="schedule-form-batch" required placeholder="e.g. BOSH SO1 Batch 1">
                 </div>
                 
-                <div class="admin-form-group">
-                    <label class="admin-form-label" for="schedule-form-dates">Scheduled Dates / Text</label>
-                    <input class="admin-form-input" type="text" id="schedule-form-dates" required placeholder="e.g. May 15-19, 2026 or Dates TBD">
+                <div class="admin-form-group" style="margin-bottom: 1.5rem;">
+                    <label class="admin-form-label">Date Selection Mode</label>
+                    <div class="schedule-mode-toggle">
+                        <button type="button" class="schedule-toggle-btn active" id="btn-toggle-calendar" data-mode="calendar">Specific Calendar Dates</button>
+                        <button type="button" class="schedule-toggle-btn" id="btn-toggle-custom" data-mode="custom">Custom Text Override</button>
+                    </div>
+                    <input type="hidden" id="schedule-mode-input" value="calendar">
+                </div>
+
+                <!-- Calendar Selection Panel -->
+                <div id="schedule-calendar-panel" style="display: block;">
+                    <div class="admin-form-group">
+                        <label class="admin-form-label" for="schedule-form-year">Scheduled Year</label>
+                        <select class="admin-form-select" id="schedule-form-year">
+                            <option value="2026">2026</option>
+                            <option value="2027">2027</option>
+                            <option value="2028">2028</option>
+                        </select>
+                    </div>
+
+                    <div id="schedule-blocks-container">
+                        <!-- Dynamically injected month calendar boxes -->
+                    </div>
+
+                    <button type="button" class="btn btn-secondary" id="btn-add-month-block" style="font-size: 0.85rem; padding: 0.6rem; width: 100%; border: 1.5px dashed var(--border-color); display: flex; justify-content: center; align-items: center; gap: 0.5rem; margin-top: 1rem; cursor: pointer;">
+                        + Add Scheduled Month
+                    </button>
+                </div>
+
+                <!-- Custom Override Panel -->
+                <div id="schedule-custom-panel" style="display: none;">
+                    <div class="admin-form-group">
+                        <label class="admin-form-label" for="schedule-form-custom-dates">Scheduled Dates / Text</label>
+                        <input class="admin-form-input" type="text" id="schedule-form-custom-dates" placeholder="e.g. Dates TBD, or Saturdays in May">
+                    </div>
+                </div>
+
+                <!-- Compiled Date Preview -->
+                <div class="schedule-preview-box">
+                    <div class="schedule-preview-label">Live Preview Representation</div>
+                    <div class="schedule-preview-text" id="schedule-live-preview">TBD</div>
+                    <input type="hidden" id="schedule-form-dates">
                 </div>
 
                 <div style="display: flex; gap: 1rem; justify-content: flex-end; border-top: 1px solid var(--border-color); padding-top: 1.5rem; margin-top: 1.5rem;">

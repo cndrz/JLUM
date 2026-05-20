@@ -254,15 +254,13 @@ async function loadEventsPage() {
         const badgeClass = evt.badgeType === 'training' ? 'event-badge-training' : 'event-badge-news';
         
         card.innerHTML = `
-            <div class="card-image" style="background-image: url('${evt.image || 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&q=80&w=800'}'); background-size: cover; background-position: center;">
-            </div>
             <div class="card-content">
                 <span class="event-badge ${badgeClass}">${evt.badge}</span>
                 <h2 class="card-title">${evt.title}</h2>
                 <p class="card-desc">${evt.summary}</p>
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto;">
                     <div class="event-date">
-                        <span>📅 ${evt.date}</span>
+                        <span>${evt.date}</span>
                     </div>
                     <a href="event-detail.html?slug=${evt.slug}" class="btn-text" style="color: var(--accent-blue); font-weight: 600; font-size: 0.95rem;">Read More →</a>
                 </div>
@@ -301,7 +299,6 @@ async function loadEventDetail(slug) {
     const titleEl = document.getElementById('event-detail-title');
     const badgeEl = document.getElementById('event-detail-badge');
     const dateEl = document.getElementById('event-detail-date');
-    const imageEl = document.getElementById('event-detail-image');
     const bodyEl = document.getElementById('event-detail-body');
     const infoTypeEl = document.getElementById('event-info-type');
     const infoDateEl = document.getElementById('event-info-date');
@@ -311,10 +308,7 @@ async function loadEventDetail(slug) {
         badgeEl.textContent = event.badge;
         badgeEl.className = 'event-badge ' + (event.badgeType === 'training' ? 'event-badge-training' : 'event-badge-news');
     }
-    if (dateEl) dateEl.innerHTML = `📅 ${event.date}`;
-    if (imageEl) {
-        imageEl.style.backgroundImage = `url('${event.image}')`;
-    }
+    if (dateEl) dateEl.textContent = event.date;
     if (bodyEl) {
         bodyEl.innerHTML = formatBody(event.body);
     }
@@ -469,9 +463,6 @@ function renderAdminEvents() {
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td>
-                <div style="width: 50px; height: 50px; border-radius: 6px; background-image: url('${evt.image}'); background-size: cover; background-position: center; border: 1px solid var(--border-color);"></div>
-            </td>
-            <td>
                 <strong style="color: var(--text-primary); font-size: 0.95rem;">${evt.title}</strong><br>
                 <span style="font-size: 0.8rem; color: var(--text-secondary);">/event-detail.html?slug=${evt.slug}</span>
             </td>
@@ -480,8 +471,8 @@ function renderAdminEvents() {
             </td>
             <td>${evt.date}</td>
             <td style="text-align: center;">
-                <button class="admin-action-btn admin-btn-edit" data-id="${evt.id}" title="Edit Article">✏️</button>
-                <button class="admin-action-btn admin-btn-delete" data-id="${evt.id}" title="Delete Article">🗑️</button>
+                <button class="admin-action-btn admin-btn-edit" data-id="${evt.id}" title="Edit Article">Edit</button>
+                <button class="admin-action-btn admin-btn-delete" data-id="${evt.id}" title="Delete Article">Delete</button>
             </td>
         `;
         tbody.appendChild(tr);
@@ -514,12 +505,279 @@ function renderAdminSchedules() {
             <td><strong>${sched.batch}</strong></td>
             <td>${sched.dates}</td>
             <td style="text-align: center;">
-                <button class="admin-action-btn admin-btn-edit" data-index="${index}" title="Edit Batch">✏️</button>
-                <button class="admin-action-btn admin-btn-delete" data-index="${index}" title="Delete Batch">🗑️</button>
+                <button class="admin-action-btn admin-btn-edit" data-index="${index}" title="Edit Batch">Edit</button>
+                <button class="admin-action-btn admin-btn-delete" data-index="${index}" title="Delete Batch">Delete</button>
             </td>
         `;
         tbody.appendChild(tr);
     });
+}
+
+// --- Interactive Calendar Schedule Date Picker Logic ---
+
+const MONTHS_LIST = [
+    { value: 'Jan', label: 'January' },
+    { value: 'Feb', label: 'February' },
+    { value: 'Mar', label: 'March' },
+    { value: 'Apr', label: 'April' },
+    { value: 'May', label: 'May' },
+    { value: 'Jun', label: 'June' },
+    { value: 'Jul', label: 'July' },
+    { value: 'Aug', label: 'August' },
+    { value: 'Sep', label: 'September' },
+    { value: 'Oct', label: 'October' },
+    { value: 'Nov', label: 'November' },
+    { value: 'Dec', label: 'December' }
+];
+
+// Helper to format an array of day numbers into standard ranges (e.g., "15-19" or "12, 14, 16")
+function formatDaysList(daysArray) {
+    if (daysArray.length === 0) return '';
+    const sorted = [...daysArray].sort((a, b) => a - b);
+    const ranges = [];
+    let start = sorted[0];
+    let end = sorted[0];
+    
+    for (let i = 1; i < sorted.length; i++) {
+        if (sorted[i] === end + 1) {
+            end = sorted[i];
+        } else {
+            if (start === end) {
+                ranges.push(`${start}`);
+            } else {
+                ranges.push(`${start}-${end}`);
+            }
+            start = sorted[i];
+            end = sorted[i];
+        }
+    }
+    if (start === end) {
+        ranges.push(`${start}`);
+    } else {
+        ranges.push(`${start}-${end}`);
+    }
+    
+    return ranges.join(', ');
+}
+
+// Render a single month calendar block inside the modal
+function createMonthBlock(selectedMonth = 'May', selectedDays = []) {
+    const container = document.getElementById('schedule-blocks-container');
+    if (!container) return;
+
+    const blockId = 'block-' + Date.now().toString(36) + '-' + Math.random().toString(36).substr(2, 4);
+    
+    const block = document.createElement('div');
+    block.className = 'schedule-block';
+    block.id = blockId;
+    
+    // Header containing Month select dropdown and Remove button
+    let optionsHtml = MONTHS_LIST.map(m => `
+        <option value="${m.value}" ${m.value === selectedMonth ? 'selected' : ''}>${m.label}</option>
+    `).join('');
+    
+    // Generate 31 day buttons
+    let daysHtml = '';
+    for (let day = 1; day <= 31; day++) {
+        const isActive = selectedDays.includes(day) ? 'active' : '';
+        daysHtml += `<button type="button" class="calendar-day-btn ${isActive}" data-day="${day}">${day}</button>`;
+    }
+    
+    block.innerHTML = `
+        <div class="schedule-block-header">
+            <div style="flex: 1;">
+                <label class="admin-form-label" style="margin-bottom: 0.25rem;">Month</label>
+                <select class="admin-form-select schedule-block-month" style="padding: 0.4rem 0.8rem; font-size: 0.9rem;">
+                    ${optionsHtml}
+                </select>
+            </div>
+            <button type="button" class="btn-remove-block">Remove Month</button>
+        </div>
+        <label class="admin-form-label" style="margin-bottom: 0.5rem; display: block; font-size: 0.8rem;">Select Scheduled Days</label>
+        <div class="calendar-days-grid">
+            ${daysHtml}
+        </div>
+    `;
+    
+    // Register interactive day button clicks
+    block.querySelector('.calendar-days-grid').addEventListener('click', (e) => {
+        const btn = e.target.closest('.calendar-day-btn');
+        if (btn) {
+            btn.classList.toggle('active');
+            compileScheduleDates();
+        }
+    });
+    
+    // Register month select change
+    block.querySelector('.schedule-block-month').addEventListener('change', () => {
+        compileScheduleDates();
+    });
+    
+    // Register remove button click
+    block.querySelector('.btn-remove-block').addEventListener('click', () => {
+        block.remove();
+        compileScheduleDates();
+    });
+    
+    container.appendChild(block);
+    compileScheduleDates();
+}
+
+// Compile selections into dynamic string preview
+function compileScheduleDates() {
+    const mode = document.getElementById('schedule-mode-input').value;
+    const previewText = document.getElementById('schedule-live-preview');
+    const hiddenInput = document.getElementById('schedule-form-dates');
+    
+    if (mode === 'custom') {
+        const customText = document.getElementById('schedule-form-custom-dates').value.trim();
+        const result = customText || 'Dates TBD';
+        previewText.textContent = result;
+        if (hiddenInput) hiddenInput.value = result;
+        return;
+    }
+    
+    // Calendar mode compilation
+    const year = document.getElementById('schedule-form-year').value;
+    const blocks = document.querySelectorAll('.schedule-block');
+    
+    if (blocks.length === 0) {
+        previewText.textContent = 'Dates TBD';
+        if (hiddenInput) hiddenInput.value = 'Dates TBD';
+        return;
+    }
+    
+    const parts = [];
+    
+    blocks.forEach(block => {
+        const monthVal = block.querySelector('.schedule-block-month').value;
+        const monthObj = MONTHS_LIST.find(m => m.value === monthVal);
+        const monthName = monthObj ? monthObj.label : monthVal;
+        
+        const activeDaysBtns = block.querySelectorAll('.calendar-day-btn.active');
+        const days = Array.from(activeDaysBtns).map(btn => parseInt(btn.getAttribute('data-day')));
+        
+        if (days.length > 0) {
+            const formattedDays = formatDaysList(days);
+            parts.push(`${monthName} ${formattedDays}`);
+        }
+    });
+    
+    if (parts.length === 0) {
+        previewText.textContent = 'Dates TBD';
+        if (hiddenInput) hiddenInput.value = 'Dates TBD';
+    } else {
+        const compiledString = `${parts.join(' & ')}, ${year}`;
+        previewText.textContent = compiledString;
+        if (hiddenInput) hiddenInput.value = compiledString;
+    }
+}
+
+// Parse existing string to reverse-populate the UI state
+function parseExistingScheduleDates(datesStr) {
+    const blocksContainer = document.getElementById('schedule-blocks-container');
+    if (blocksContainer) blocksContainer.innerHTML = ''; // Reset Month Blocks
+    
+    if (!datesStr || datesStr === 'Dates TBD') {
+        setScheduleEditorMode('calendar');
+        document.getElementById('schedule-form-year').value = new Date().getFullYear().toString();
+        createMonthBlock('May', []);
+        return;
+    }
+    
+    // Match year ending (e.g. ", 2026")
+    const yearMatch = datesStr.match(/,\s*(20\d{2})$/);
+    if (!yearMatch) {
+        // Fallback to custom text override
+        setScheduleEditorMode('custom');
+        document.getElementById('schedule-form-custom-dates').value = datesStr;
+        compileScheduleDates();
+        return;
+    }
+    
+    const year = yearMatch[1];
+    document.getElementById('schedule-form-year').value = year;
+    
+    // Get month sections e.g., "May 15-19 & June 2-3"
+    const datesBody = datesStr.slice(0, yearMatch.index).trim();
+    const segments = datesBody.split(/\s*&\s*|\s+and\s+/i);
+    
+    let parsedAtLeastOne = false;
+    
+    segments.forEach(segment => {
+        // Match month name
+        const words = segment.trim().split(/\s+/);
+        if (words.length < 2) return;
+        
+        const monthWord = words[0];
+        const daysPart = words.slice(1).join(' ');
+        
+        // Match against list of months
+        const monthObj = MONTHS_LIST.find(m => 
+            m.label.toLowerCase().startsWith(monthWord.toLowerCase()) ||
+            monthWord.toLowerCase().startsWith(m.value.toLowerCase())
+        );
+        
+        if (!monthObj) return;
+        
+        // Parse days list e.g., "15-19" or "12, 14, 16"
+        const days = [];
+        const subparts = daysPart.split(/\s*,\s*/);
+        
+        subparts.forEach(sub => {
+            if (sub.includes('-')) {
+                const rangeParts = sub.split('-');
+                if (rangeParts.length === 2) {
+                    const start = parseInt(rangeParts[0].trim());
+                    const end = parseInt(rangeParts[1].trim());
+                    if (!isNaN(start) && !isNaN(end) && start <= end && start >= 1 && end <= 31) {
+                        for (let d = start; d <= end; d++) {
+                            days.push(d);
+                        }
+                    }
+                }
+            } else {
+                const dayNum = parseInt(sub.trim());
+                if (!isNaN(dayNum) && dayNum >= 1 && dayNum <= 31) {
+                    days.push(dayNum);
+                }
+            }
+        });
+        
+        createMonthBlock(monthObj.value, days);
+        parsedAtLeastOne = true;
+    });
+    
+    if (parsedAtLeastOne) {
+        setScheduleEditorMode('calendar');
+    } else {
+        // Fallback to custom mode if parser fails
+        setScheduleEditorMode('custom');
+        document.getElementById('schedule-form-custom-dates').value = datesStr;
+    }
+    compileScheduleDates();
+}
+
+function setScheduleEditorMode(mode) {
+    const calendarBtn = document.getElementById('btn-toggle-calendar');
+    const customBtn = document.getElementById('btn-toggle-custom');
+    const calendarPanel = document.getElementById('schedule-calendar-panel');
+    const customPanel = document.getElementById('schedule-custom-panel');
+    const modeInput = document.getElementById('schedule-mode-input');
+    
+    if (mode === 'calendar') {
+        calendarBtn.classList.add('active');
+        customBtn.classList.remove('active');
+        calendarPanel.style.display = 'block';
+        customPanel.style.display = 'none';
+        modeInput.value = 'calendar';
+    } else {
+        calendarBtn.classList.remove('active');
+        customBtn.classList.add('active');
+        calendarPanel.style.display = 'none';
+        customPanel.style.display = 'block';
+        modeInput.value = 'custom';
+    }
 }
 
 // Set up event listeners for CRUD buttons
@@ -556,7 +814,6 @@ function setupDashboardCRUD() {
                 document.getElementById('event-form-badge-type').value = evt.badgeType;
                 document.getElementById('event-form-date').value = evt.date;
                 document.getElementById('event-form-slug').value = evt.slug;
-                document.getElementById('event-form-image').value = evt.image;
                 document.getElementById('event-form-summary').value = evt.summary;
                 document.getElementById('event-form-body').value = evt.body;
 
@@ -580,7 +837,6 @@ function setupDashboardCRUD() {
         const badgeType = document.getElementById('event-form-badge-type').value;
         const date = document.getElementById('event-form-date').value.trim();
         const slug = document.getElementById('event-form-slug').value.trim();
-        const image = document.getElementById('event-form-image').value.trim();
         const summary = document.getElementById('event-form-summary').value.trim();
         const body = document.getElementById('event-form-body').value.trim();
 
@@ -588,12 +844,12 @@ function setupDashboardCRUD() {
             // Edit existing
             const index = localContentData.events.findIndex(x => x.id === id);
             if (index !== -1) {
-                localContentData.events[index] = { id, title, badge, badgeType, date, slug, image, summary, body };
+                localContentData.events[index] = { id, title, badge, badgeType, date, slug, summary, body };
             }
         } else {
             // Add new
             const newId = 'evt-' + Date.now().toString(36);
-            localContentData.events.unshift({ id: newId, title, badge, badgeType, date, slug, image, summary, body });
+            localContentData.events.unshift({ id: newId, title, badge, badgeType, date, slug, summary, body });
         }
 
         eventModal.classList.remove('show');
@@ -602,10 +858,39 @@ function setupDashboardCRUD() {
     });
 
     // SCHEDULES CRUD ACTIONS
+    
+    // Bind toggle buttons for Schedule Date Picker Mode
+    document.getElementById('btn-toggle-calendar').addEventListener('click', () => {
+        setScheduleEditorMode('calendar');
+        compileScheduleDates();
+    });
+    
+    document.getElementById('btn-toggle-custom').addEventListener('click', () => {
+        setScheduleEditorMode('custom');
+        compileScheduleDates();
+    });
+    
+    // Bind change listener on year selector and custom text
+    document.getElementById('schedule-form-year').addEventListener('change', compileScheduleDates);
+    document.getElementById('schedule-form-custom-dates').addEventListener('input', compileScheduleDates);
+    
+    // Add Month block click listener
+    document.getElementById('btn-add-month-block').addEventListener('click', () => {
+        createMonthBlock('May', []);
+    });
+
     document.getElementById('btn-add-schedule').addEventListener('click', () => {
         document.getElementById('schedule-editor-form').reset();
         document.getElementById('schedule-form-index').value = '';
         document.getElementById('schedule-modal-title').textContent = 'Add Batch';
+        
+        // Setup default calendar selector state
+        setScheduleEditorMode('calendar');
+        document.getElementById('schedule-form-year').value = new Date().getFullYear().toString();
+        const container = document.getElementById('schedule-blocks-container');
+        if (container) container.innerHTML = '';
+        createMonthBlock('May', []);
+        
         scheduleModal.classList.add('show');
     });
 
@@ -625,7 +910,9 @@ function setupDashboardCRUD() {
             if (sched) {
                 document.getElementById('schedule-form-index').value = idx;
                 document.getElementById('schedule-form-batch').value = sched.batch;
-                document.getElementById('schedule-form-dates').value = sched.dates;
+                
+                // Parse existing dates and populate picker UI
+                parseExistingScheduleDates(sched.dates);
                 
                 document.getElementById('schedule-modal-title').textContent = 'Edit Batch';
                 scheduleModal.classList.add('show');
@@ -671,7 +958,7 @@ function setupDashboardCRUD() {
 
 function markUnsavedChanges() {
     const indicator = document.getElementById('publish-status');
-    indicator.textContent = '⚠️ Unsaved changes locally. Please publish!';
+    indicator.textContent = 'Unsaved changes locally. Please publish!';
     indicator.className = 'publish-status-indicator error';
 }
 
@@ -689,7 +976,7 @@ async function publishChangesToGitHub() {
     try {
         // Step 1: Update UI to saving
         btn.disabled = true;
-        indicator.textContent = '🔄 Accessing Repository...';
+        indicator.textContent = 'Accessing Repository...';
         indicator.className = 'publish-status-indicator saving';
 
         // Step 2: Fetch current content.json SHA
@@ -712,7 +999,7 @@ async function publishChangesToGitHub() {
         }
 
         // Step 3: Put/Commit updated database
-        indicator.textContent = '🔄 Committing Content Database...';
+        indicator.textContent = 'Committing Content Database...';
         
         // Safely stringify local content memory
         const jsonContentStr = JSON.stringify(localContentData, null, 2);
@@ -740,7 +1027,7 @@ async function publishChangesToGitHub() {
         }
 
         // Step 4: Output Rebuilding Status
-        indicator.textContent = '✅ Published! Vercel Rebuilding (~30-60s)...';
+        indicator.textContent = 'Published! Vercel Rebuilding (~30-60s)...';
         indicator.className = 'publish-status-indicator success';
         
         const timestamp = new Date().toLocaleTimeString();
@@ -754,7 +1041,7 @@ async function publishChangesToGitHub() {
     } catch (error) {
         console.error('Error publishing to GitHub:', error);
         alert(`Failed to publish changes: ${error.message}`);
-        indicator.textContent = '❌ Failed to publish live.';
+        indicator.textContent = 'Failed to publish live.';
         indicator.className = 'publish-status-indicator error';
     } finally {
         btn.disabled = false;
