@@ -66,6 +66,19 @@ document.addEventListener('DOMContentLoaded', () => {
             app.innerHTML = html;
             window.scrollTo(0, 0);
 
+            // Update title dynamically from loaded fragment's h1
+            if (filename === 'home.html') {
+                document.title = 'JL UNI MULTISERV INC. | Home';
+            } else {
+                const pageTitleEl = app.querySelector('h1');
+                if (pageTitleEl) {
+                    const titleText = pageTitleEl.textContent.trim();
+                    document.title = `JL UNI MULTISERV INC. | ${titleText}`;
+                } else {
+                    document.title = 'JL UNI MULTISERV INC.';
+                }
+            }
+
             updateActiveLinks(filename);
 
             // Initialize page specific logic
