@@ -571,6 +571,8 @@ function createMonthBlock(selectedMonth = 'May', selectedDays = []) {
     block.className = 'schedule-block';
     block.id = blockId;
     
+    let lastClickedDay = null;
+    
     // Header containing Month select dropdown and Remove button
     let optionsHtml = MONTHS_LIST.map(m => `
         <option value="${m.value}" ${m.value === selectedMonth ? 'selected' : ''}>${m.label}</option>
@@ -593,7 +595,9 @@ function createMonthBlock(selectedMonth = 'May', selectedDays = []) {
             </div>
             <button type="button" class="btn-remove-block">Remove Month</button>
         </div>
-        <label class="admin-form-label" style="margin-bottom: 0.5rem; display: block; font-size: 0.8rem;">Select Scheduled Days</label>
+        <label class="admin-form-label" style="margin-bottom: 0.5rem; display: block; font-size: 0.8rem;">
+            Select Scheduled Days <span style="font-weight: normal; color: var(--text-secondary); margin-left: 0.5rem; font-style: italic;">(Tip: Hold Shift + click to select range)</span>
+        </label>
         <div class="calendar-days-grid">
             ${daysHtml}
         </div>
@@ -603,7 +607,20 @@ function createMonthBlock(selectedMonth = 'May', selectedDays = []) {
     block.querySelector('.calendar-days-grid').addEventListener('click', (e) => {
         const btn = e.target.closest('.calendar-day-btn');
         if (btn) {
-            btn.classList.toggle('active');
+            const currentDay = parseInt(btn.getAttribute('data-day'));
+            if (e.shiftKey && lastClickedDay !== null) {
+                const start = Math.min(lastClickedDay, currentDay);
+                const end = Math.max(lastClickedDay, currentDay);
+                block.querySelectorAll('.calendar-day-btn').forEach(b => {
+                    const d = parseInt(b.getAttribute('data-day'));
+                    if (d >= start && d <= end) {
+                        b.classList.add('active');
+                    }
+                });
+            } else {
+                btn.classList.toggle('active');
+            }
+            lastClickedDay = currentDay;
             compileScheduleDates();
         }
     });

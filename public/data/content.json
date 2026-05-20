@@ -49,6 +49,54 @@
         "batch": "Audit Batch 1",
         "dates": "Dates TBD"
       }
+    ],
+    "ergonomics": [
+      {
+        "batch": "ERA Batch 1",
+        "dates": "Dates TBD"
+      }
+    ],
+    "sales-marketing": [
+      {
+        "batch": "Sales & Marketing Batch 1",
+        "dates": "Dates TBD"
+      }
+    ],
+    "competency-performance": [
+      {
+        "batch": "Competency Batch 1",
+        "dates": "Dates TBD"
+      }
+    ],
+    "leadership": [
+      {
+        "batch": "Leadership Batch 1",
+        "dates": "Dates TBD"
+      }
+    ],
+    "supervisory-skills": [
+      {
+        "batch": "Supervisory Batch 1",
+        "dates": "Dates TBD"
+      }
+    ],
+    "negotiation": [
+      {
+        "batch": "Negotiation Batch 1",
+        "dates": "Dates TBD"
+      }
+    ],
+    "effective-communication": [
+      {
+        "batch": "Communication Batch 1",
+        "dates": "Dates TBD"
+      }
+    ],
+    "presentation-skills": [
+      {
+        "batch": "Presentation Batch 1",
+        "dates": "Dates TBD"
+      }
     ]
   }
 }
