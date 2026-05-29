@@ -226,6 +226,19 @@
                         <label class="admin-form-label" for="event-form-body">Full Article Content (Body)</label>
                         <textarea class="admin-form-textarea" id="event-form-body" required placeholder="Full description for the detail page. Supports multiple paragraphs."></textarea>
                     </div>
+
+                    <div class="admin-form-group admin-form-group-full">
+                        <label class="admin-form-label">Upload Event Photos (Max 5)</label>
+                        <div class="image-upload-dropzone" id="event-image-dropzone">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-blue); margin-bottom: 0.5rem;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                            <p style="font-size: 0.9rem; font-weight: 500; margin: 0;">Drag and drop your images here, or <span style="color: var(--accent-blue); text-decoration: underline; cursor: pointer;" id="btn-browse-images">browse</span></p>
+                            <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem; margin-bottom: 0;">Supports JPEG, PNG, WebP (Automatically compressed to under 120KB)</p>
+                            <input type="file" id="event-image-input" multiple accept="image/*" style="display: none;">
+                        </div>
+                        <div class="image-previews-container" id="event-image-previews">
+                            <!-- Image thumbnails will render dynamically here -->
+                        </div>
+                    </div>
                 </div>
 
                 <div style="display: flex; gap: 1rem; justify-content: flex-end; border-top: 1px solid var(--border-color); padding-top: 1.5rem;">

@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
+    let currentEventImages = []; // Global variable for active event uploads in Admin portal
+
     // Dropdown logic
     const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
 
@@ -253,7 +255,13 @@ async function loadEventsPage() {
         
         const badgeClass = evt.badgeType === 'training' ? 'event-badge-training' : 'event-badge-news';
         
+        let imageHtml = '';
+        if (evt.images && evt.images.length > 0) {
+            imageHtml = `<div class="card-image" style="background-image: url('${evt.images[0]}'); background-size: cover; background-position: center; height: 200px;"></div>`;
+        }
+        
         card.innerHTML = `
+            ${imageHtml}
             <div class="card-content">
                 <span class="event-badge ${badgeClass}">${evt.badge}</span>
                 <h2 class="card-title">${evt.title}</h2>
@@ -309,9 +317,54 @@ async function loadEventDetail(slug) {
         badgeEl.className = 'event-badge ' + (event.badgeType === 'training' ? 'event-badge-training' : 'event-badge-news');
     }
     if (dateEl) dateEl.textContent = event.date;
+    
     if (bodyEl) {
-        bodyEl.innerHTML = formatBody(event.body);
+        let galleryHtml = '';
+        if (event.images && event.images.length > 0) {
+            const featuredImage = event.images[0];
+            let thumbsHtml = '';
+            
+            if (event.images.length > 1) {
+                thumbsHtml = `
+                    <div class="event-gallery-thumbs">
+                        ${event.images.map((img, idx) => `
+                            <div class="event-gallery-thumb ${idx === 0 ? 'active' : ''}" data-src="${img}">
+                                <img src="${img}" alt="Thumbnail">
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+            
+            galleryHtml = `
+                <div class="event-gallery-container">
+                    <div class="event-gallery-featured">
+                        <img id="featured-gallery-img" src="${featuredImage}" alt="Featured event image">
+                    </div>
+                    ${thumbsHtml}
+                </div>
+            `;
+        }
+        
+        bodyEl.innerHTML = formatBody(event.body) + galleryHtml;
+        
+        // Setup clicking thumbnails to switch featured image
+        const thumbs = bodyEl.querySelectorAll('.event-gallery-thumb');
+        const featuredImg = bodyEl.querySelector('#featured-gallery-img');
+        
+        thumbs.forEach(thumb => {
+            thumb.addEventListener('click', () => {
+                thumbs.forEach(t => t.classList.remove('active'));
+                thumb.classList.add('active');
+                
+                const src = thumb.getAttribute('data-src');
+                if (featuredImg) {
+                    featuredImg.src = src;
+                }
+            });
+        });
     }
+    
     if (infoTypeEl) infoTypeEl.textContent = event.badge;
     if (infoDateEl) infoDateEl.textContent = event.date;
 
@@ -807,11 +860,143 @@ function setupDashboardCRUD() {
     const eventModal = document.getElementById('event-form-modal');
     const scheduleModal = document.getElementById('schedule-form-modal');
 
+    // Helper function to compress images locally in browser using HTML5 Canvas
+    function compressImage(file) {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 1024;
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > MAX_WIDTH) {
+                        height = Math.round((height * MAX_WIDTH) / width);
+                        width = MAX_WIDTH;
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    // Compress as JPEG at 0.8 quality
+                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.8);
+                    
+                    // Sanitize file extension to .jpg
+                    const extensionIndex = file.name.lastIndexOf('.');
+                    const nameWithoutExtension = extensionIndex !== -1 ? file.name.substring(0, extensionIndex) : file.name;
+                    const cleanName = nameWithoutExtension.replace(/[^a-zA-Z0-9]/g, '-') + '.jpg';
+                    
+                    resolve({
+                        name: cleanName,
+                        base64: compressedBase64
+                    });
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // Render image preview thumbnails in the Event modal form
+    function renderImagePreviews() {
+        const container = document.getElementById('event-image-previews');
+        if (!container) return;
+        container.innerHTML = '';
+
+        currentEventImages.forEach((img, idx) => {
+            const thumb = document.createElement('div');
+            thumb.className = 'image-preview-thumbnail';
+            const src = typeof img === 'string' ? img : img.base64;
+            
+            thumb.innerHTML = `
+                <img src="${src}" alt="Event preview thumbnail">
+                <button type="button" class="image-preview-delete" data-index="${idx}">&times;</button>
+            `;
+            container.appendChild(thumb);
+        });
+
+        // Register delete actions for preview thumbnails
+        container.querySelectorAll('.image-preview-delete').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const idx = parseInt(btn.getAttribute('data-index'));
+                currentEventImages.splice(idx, 1);
+                renderImagePreviews();
+            });
+        });
+    }
+
+    // Handle incoming selected images and compress them
+    async function handleImageSelection(files) {
+        const validFiles = Array.from(files).filter(file => file.type.startsWith('image/'));
+        
+        if (currentEventImages.length + validFiles.length > 5) {
+            alert('Maximum limit exceeded. You can only attach up to 5 images per news or event.');
+            return;
+        }
+
+        for (let file of validFiles) {
+            const compressed = await compressImage(file);
+            currentEventImages.push(compressed);
+        }
+        renderImagePreviews();
+    }
+
+    // Bind Image Dropzone & Selection event handlers
+    const dropzone = document.getElementById('event-image-dropzone');
+    const imageInput = document.getElementById('event-image-input');
+    const browseBtn = document.getElementById('btn-browse-images');
+
+    if (browseBtn && imageInput) {
+        browseBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            imageInput.click();
+        });
+    }
+
+    if (imageInput) {
+        imageInput.addEventListener('change', async (e) => {
+            await handleImageSelection(e.target.files);
+            imageInput.value = ''; // Reset input element
+        });
+    }
+
+    if (dropzone) {
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropzone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                dropzone.classList.add('dragover');
+            }, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropzone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                dropzone.classList.remove('dragover');
+            }, false);
+        });
+
+        dropzone.addEventListener('drop', async (e) => {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            await handleImageSelection(files);
+        }, false);
+    }
+
     // NEWS EVENTS CRUD ACTIONS
     document.getElementById('btn-add-event').addEventListener('click', () => {
         document.getElementById('event-editor-form').reset();
         document.getElementById('event-form-id').value = '';
         document.getElementById('event-modal-title').textContent = 'New Article';
+        
+        // Reset image array for new form
+        currentEventImages = [];
+        renderImagePreviews();
+        
         eventModal.classList.add('show');
     });
 
@@ -833,6 +1018,13 @@ function setupDashboardCRUD() {
                 document.getElementById('event-form-slug').value = evt.slug;
                 document.getElementById('event-form-summary').value = evt.summary;
                 document.getElementById('event-form-body').value = evt.body;
+
+                // Load existing and pending images into state
+                currentEventImages = evt.images ? [...evt.images] : [];
+                if (evt.pendingImages) {
+                    currentEventImages.push(...evt.pendingImages);
+                }
+                renderImagePreviews();
 
                 document.getElementById('event-modal-title').textContent = 'Edit Article';
                 eventModal.classList.add('show');
@@ -857,16 +1049,28 @@ function setupDashboardCRUD() {
         const summary = document.getElementById('event-form-summary').value.trim();
         const body = document.getElementById('event-form-body').value.trim();
 
+        // Categorize images in state
+        const existingImages = currentEventImages.filter(x => typeof x === 'string');
+        const pendingImages = currentEventImages.filter(x => typeof x === 'object');
+
         if (id) {
             // Edit existing
             const index = localContentData.events.findIndex(x => x.id === id);
             if (index !== -1) {
-                localContentData.events[index] = { id, title, badge, badgeType, date, slug, summary, body };
+                localContentData.events[index] = { 
+                    id, title, badge, badgeType, date, slug, summary, body,
+                    images: existingImages,
+                    pendingImages: pendingImages
+                };
             }
         } else {
             // Add new
             const newId = 'evt-' + Date.now().toString(36);
-            localContentData.events.unshift({ id: newId, title, badge, badgeType, date, slug, summary, body });
+            localContentData.events.unshift({ 
+                id: newId, title, badge, badgeType, date, slug, summary, body,
+                images: existingImages,
+                pendingImages: pendingImages
+            });
         }
 
         eventModal.classList.remove('show');
@@ -995,6 +1199,56 @@ async function publishChangesToGitHub() {
         btn.disabled = true;
         indicator.textContent = 'Accessing Repository...';
         indicator.className = 'publish-status-indicator saving';
+
+        // Step 1.5: Batch-upload all newly selected local images to GitHub uploads folder in parallel
+        indicator.textContent = 'Uploading New Images to GitHub...';
+        
+        let pendingUploads = [];
+        
+        localContentData.events.forEach(evt => {
+            if (evt.pendingImages && evt.pendingImages.length > 0) {
+                evt.pendingImages.forEach(img => {
+                    const timestamp = Date.now();
+                    const uploadPath = `public/images/uploads/events/${evt.slug}-${timestamp}-${img.name}`;
+                    
+                    // Extract raw Base64 contents by splitting data URL header
+                    const rawBase64 = img.base64.split(',')[1];
+                    
+                    pendingUploads.push((async () => {
+                        const imgUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${uploadPath}`;
+                        const uploadResponse = await fetch(imgUrl, {
+                            method: 'PUT',
+                            headers: {
+                                'Authorization': `token ${pat}`,
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/vnd.github.v3+json'
+                            },
+                            body: JSON.stringify({
+                                message: `Upload event media resource: ${img.name}`,
+                                content: rawBase64
+                            })
+                        });
+                        
+                        if (!uploadResponse.ok) {
+                            throw new Error(`Failed to upload photo resource: ${img.name}`);
+                        }
+                        
+                        // Push standard website relative path to resolving images list
+                        if (!evt.images) evt.images = [];
+                        evt.images.push(`/images/uploads/events/${evt.slug}-${timestamp}-${img.name}`);
+                    })());
+                });
+            }
+        });
+
+        // Run all uploads in parallel
+        if (pendingUploads.length > 0) {
+            await Promise.all(pendingUploads);
+            // Completely clean up pendingImages structure so they aren't stored inside content.json
+            localContentData.events.forEach(evt => {
+                delete evt.pendingImages;
+            });
+        }
 
         // Step 2: Fetch current content.json SHA
         const apiUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${CONTENT_FILE_PATH}`;
