@@ -1715,12 +1715,7 @@ a {
     font-weight: 500;
     transition: color 0.2s ease;
 }
-    background: var(--accent-blue);
-    border-color: var(--accent-blue);
-    color: #ffffff;
-    font-weight: 600;
-    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
-}
+
 
 .schedule-preview-box {
     margin-top: 1.5rem;
