@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-    let currentEventImages = []; // Global variable for active event uploads in Admin portal
+    let currentEventImages = [];
+window.currentEventImages = currentEventImages;
 
     // Dropdown logic
     const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
