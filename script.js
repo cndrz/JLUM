@@ -1,7 +1,6 @@
-document.addEventListener('DOMContentLoaded', () => {
-    let currentEventImages = [];
-window.currentEventImages = currentEventImages;
+let currentEventImages = [];
 
+document.addEventListener('DOMContentLoaded', () => {
     // Dropdown logic
     const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
 
