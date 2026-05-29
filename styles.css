@@ -70,13 +70,25 @@ a {
     left: 0;
     width: 100%;
     height: var(--nav-height);
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border-bottom: 1px solid var(--border-color);
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: none;
     display: flex;
     justify-content: center;
     z-index: 100;
+}
+
+/* Elegant micro-gradient underline for the navbar */
+.navbar::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent-green) 0%, var(--accent-blue) 100%);
+    opacity: 0.8;
 }
  
 .nav-container {
@@ -599,10 +611,11 @@ a {
  
 /* Footer */
 .footer {
-    background: var(--bg-primary);
-    border-top: 1px solid var(--border-color);
+    background: #0b1329; /* Deep premium dark navy */
+    border-top: none;
     padding: var(--section-padding) 1.5rem;
     margin-top: auto;
+    color: #f1f5f9;
 }
  
 .footer-grid {
@@ -616,7 +629,7 @@ a {
 .footer-col h4 {
     margin-bottom: 1.5rem;
     font-size: 1.1rem;
-    color: var(--accent-green);
+    color: #4ade80; /* Soft mint brand green for perfect readability */
 }
  
 .footer-col ul {
@@ -628,11 +641,11 @@ a {
 }
  
 .footer-col ul li a {
-    color: var(--text-secondary);
+    color: #94a3b8; /* Elegant slate gray */
 }
  
 .footer-col ul li a:hover {
-    color: var(--accent-green);
+    color: var(--accent-blue); /* Premium blue highlight on hover */
 }
  
 .footer-logo {
