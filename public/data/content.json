@@ -1,5 +1,19 @@
 {
-  "events": [],
+  "events": [
+    {
+      "id": "evt-mpsfub1g",
+      "title": "DFGDFSGSDFG",
+      "badge": "FGDFGDFG",
+      "badgeType": "training",
+      "date": "dfdsfds",
+      "slug": "bosh-111-april-2027",
+      "summary": "hi",
+      "body": "DASDASD",
+      "images": [
+        "/images/uploads/events/bosh-111-april-2027-1780150833167-Apple.jpg"
+      ]
+    }
+  ],
   "schedules": {
     "bosh-so1": [],
     "bosh-so2": [],
