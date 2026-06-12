@@ -1,20 +1,5 @@
 {
-  "events": [
-    {
-      "id": "evt-mqaxgnzo",
-      "title": "DFGDFGFG",
-      "badge": "KLHBGV",
-      "badgeType": "news",
-      "date": "June, 06, 2026",
-      "slug": "d-d-d-11",
-      "summary": "qqqqq",
-      "body": "FEIOHQ",
-      "images": [
-        "/images/uploads/events/d-d-d-11-1781268868060-wallpaper.jpg",
-        "/images/uploads/events/d-d-d-11-1781268901941-pexels-optical-chemist-340351297-31256342.jpg"
-      ]
-    }
-  ],
+  "events": [],
   "schedules": {
     "bosh-so1": [],
     "bosh-so2": [],
