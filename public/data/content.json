@@ -1,19 +1,5 @@
 {
-  "events": [
-    {
-      "id": "evt-mqawkun8",
-      "title": "DFGDFGFG",
-      "badge": "ASDASADADS",
-      "badgeType": "news",
-      "date": "June, 06, 2026",
-      "slug": "d-d-d-11",
-      "summary": "kwd",
-      "body": "oqk1o",
-      "images": [
-        "/images/uploads/events/d-d-d-11-1781267370750-Screenshot-2026-06-12-164034.jpg"
-      ]
-    }
-  ],
+  "events": [],
   "schedules": {
     "bosh-so1": [],
     "bosh-so2": [],
