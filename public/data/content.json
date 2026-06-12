@@ -1,5 +1,19 @@
 {
-  "events": [],
+  "events": [
+    {
+      "id": "evt-mqaxsuz3",
+      "title": "Sample Title",
+      "badge": "Sample Label",
+      "badgeType": "training",
+      "date": "June, 06, 2026",
+      "slug": "sample-slug-june-2026",
+      "summary": "Sample Summary",
+      "body": "Sample Content",
+      "images": [
+        "/images/uploads/events/sample-slug-june-2026-1781269491550-wallpaper.jpg"
+      ]
+    }
+  ],
   "schedules": {
     "bosh-so1": [],
     "bosh-so2": [],
@@ -12,7 +26,7 @@
     "standard-first-aid": [
       {
         "batch": "SFA-BLS Batch 1",
-        "dates": "Dates TBD"
+        "dates": "August 1-11 & September 1, 3, 5, 2026"
       }
     ],
     "emergency-first-aid": [
