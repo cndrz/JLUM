@@ -9,6 +9,10 @@
       {
         "batch": "BOSH SO1",
         "dates": "August 8, 2026"
+      },
+      {
+        "batch": "BOSH SO2",
+        "dates": "July 13-16, 2026"
       }
     ],
     "bosh-so2": [],
