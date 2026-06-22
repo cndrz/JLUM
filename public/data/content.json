@@ -25,6 +25,10 @@
       {
         "batch": "COSH SO2",
         "dates": "July 27-30, 2026"
+      },
+      {
+        "batch": "COSH SO2",
+        "dates": "August 15-16, 22-23, 2026"
       }
     ],
     "standard-first-aid": [],
