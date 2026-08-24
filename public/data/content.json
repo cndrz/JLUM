@@ -4,31 +4,31 @@
     "bosh-so1": [
       {
         "batch": "BOSH SO1",
-        "dates": "July 11, 2026"
+        "dates": "September 5, 2026"
       },
       {
         "batch": "BOSH SO1",
-        "dates": "August 8, 2026"
+        "dates": "October 11, 2026"
       }
     ],
     "bosh-so2": [
       {
         "batch": "BOSH SO2",
-        "dates": "July 13-16, 2026"
+        "dates": "September 14-17, 2026"
       },
       {
         "batch": "BOSH SO2",
-        "dates": "August 24-27, 2026"
+        "dates": "October 5-8, 2026"
       }
     ],
     "cosh-so2": [
       {
         "batch": "COSH SO2",
-        "dates": "July 27-30, 2026"
+        "dates": "September 21-24, 2026"
       },
       {
         "batch": "COSH SO2",
-        "dates": "August 15-16, 22-23, 2026"
+        "dates": "October 12-15, 2026"
       }
     ],
     "standard-first-aid": [],
