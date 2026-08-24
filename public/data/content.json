@@ -31,35 +31,40 @@
         "dates": "October 12-15, 2026"
       }
     ],
-    "standard-first-aid": [],
+    "standard-first-aid": [
+      {
+        "batch": "Standard First Aid and BLS (SFAT n BLS)",
+        "dates": "September 22-25, 2026"
+      }
+    ],
     "emergency-first-aid": [
       {
-        "batch": "EFA Batch 1",
-        "dates": "Dates TBD"
+        "batch": "Emergency First Aid (EFAT)",
+        "dates": "September 21, 2026"
       }
     ],
     "occupational-first-aid": [
       {
-        "batch": "OFA-BLS Batch 1",
-        "dates": "Dates TBD"
+        "batch": "Occupational First Aid (OFAT)",
+        "dates": "September 17-18, 2026"
       }
     ],
     "lcm-hirac": [
       {
-        "batch": "LCM+HIRAC Batch 1",
-        "dates": "Dates TBD"
+        "batch": "LCM+HIRAC",
+        "dates": "September 12-13, 19-20, 28, 2026"
       }
     ],
     "tot": [
       {
-        "batch": "TOT Batch 1",
-        "dates": "Dates TBD"
+        "batch": "TOT",
+        "dates": "September 7-8, 2026"
       }
     ],
     "audit": [
       {
-        "batch": "Audit Batch 1",
-        "dates": "Dates TBD"
+        "batch": "SPA",
+        "dates": "September 28-30 & October 1, 2026"
       }
     ],
     "ergonomics": [],
